@@ -35,7 +35,7 @@ app.use('/api/login', loginRouter);
 /**
  *  Morgan Loger 
  */
-if(process.env.NODE_ENV !== 'test') {
+if(process.env.NODE_ENV === 'dev') {
     //use morgan to log at command line
     app.use(morgan('combined')); //'combined' outputs the Apache style LOGs
 }
