@@ -25,6 +25,8 @@ const wrongEmail = {
     email : 'wrongEmail@gmail.com'
 }
 
+let Cookie = '';
+
 describe('Login / Logout flow', () => {
 
     try {
@@ -41,8 +43,26 @@ describe('Login / Logout flow', () => {
 
             res.should.have.status(200)
             res.body.should.be.a('object')
+
+            Cookie = res.headers['set-cookie'].pop().split(';')[0];
      
         });
+
+        it('Respones text should be Hello', async () => {
+
+            const req = chai.request(server).get('/');
+            // Set cookie to get saved user session
+            req.cookies = Cookie;
+
+            const res = await req;
+
+            console.log(res.text);
+            console.log('GET status =>>>', res.status);
+
+            res.text.should.be.a.string('hello ikamean')
+            res.should.have.status(200)
+
+        })
 
 
         it('Login status must be 401', async () => {

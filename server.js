@@ -56,7 +56,11 @@ if(process.env.NODE_ENV === 'dev') {
 
 
 app.get('/', ( req , res ) => {
-    console.log('Session is activated', req.session);
+    
+    if(req.session.name){
+        res.send(`hello ${req.session.name}`)
+    }
+
     res.send('Server is up')
 })
 
