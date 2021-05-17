@@ -20,7 +20,8 @@ const loginRouter = require('./routes/login.js');
  */
 app.use(express.json());
 app.use(cors({
-    origin: '*'
+    origin: '*',
+    methods: [ GET, POST, PUT, DELETE ]
 }));
 
 
