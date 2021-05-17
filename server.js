@@ -39,6 +39,10 @@ if(process.env.NODE_ENV !== 'test') {
     app.use(morgan('combined')); //'combined' outputs the Apache style LOGs
 }
 
+app.get('/', ( req , res ) => {
+    res.send('Server is up')
+})
+
 
 
 const PORT = 5000 || process.env.PORT;
