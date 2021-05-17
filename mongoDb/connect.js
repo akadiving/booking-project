@@ -3,7 +3,7 @@ let config = require('config'); //we load the db location from the JSON files
 
 console.log(config);
 const devUrl = config.get('dev.db');
-const testUrl = config.get('chai.db');
+const testUrl = config.get('test.db');
 
 
 
