@@ -4,8 +4,8 @@ const mongoose = require('../connect');
 const doctorSchema = new mongoose.Schema({
     name: String,
     email: String,
-    token: String,
-    booking: Array
+    booking: Array,
+    occupation: String
 })
 
 doctorSchema.set('toJSON', {

@@ -40,6 +40,8 @@ if(process.env.NODE_ENV === 'dev') {
     app.use(morgan('combined')); //'combined' outputs the Apache style LOGs
 }
 
+
+
 app.get('/', ( req , res ) => {
     res.send('Server is up')
 })

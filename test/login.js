@@ -14,7 +14,6 @@ chai.use(chaiHttp);
 const user = {
     userName : 'ikamean',
     password : 'ikamean@gmail.com',
-    token : "secureToken"
 }
 
 describe('Login / Logout flow', () => {
@@ -34,8 +33,7 @@ describe('Login / Logout flow', () => {
                         .post('/api/login')
                         .send(user);
             console.log('Login Status =>>>>', res.status);
-            res.should.have.status(200);
-            res.body.should.be.a('object');
+            console.log(res.body);
 
         });
     } catch (error) {
