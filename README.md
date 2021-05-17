@@ -1,0 +1,1 @@
+MONGO_URI=mongodb+srv://ikamean:19717494@cluster0.ycbbo.mongodb.net/

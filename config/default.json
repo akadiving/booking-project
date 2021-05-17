@@ -1,0 +1,9 @@
+{
+    "dev" : {
+        "db" : "booking?retryWrites=true&w=majority"
+    } ,
+
+    "test" : {
+        "db" : "bookingTest?retryWrites=true&w=majority"
+    } 
+}
