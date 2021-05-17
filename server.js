@@ -10,6 +10,12 @@ const morgan = require('morgan');
 
 
 /**
+ * Middlewares
+ */
+const verifyEmail = require('./middlewares/verifyEmail');
+
+
+/**
  *  ROUTERS
  */
 const loginRouter = require('./routes/login.js');
@@ -29,7 +35,7 @@ app.use(cors({
 /**
  *  ROUTES
  */
-app.use('/api/login', loginRouter);
+app.use('/api/login', verifyEmail, loginRouter);
 
 
 /**

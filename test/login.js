@@ -20,6 +20,11 @@ const user = {
     email : 'ikamean@gmail.com',
 }
 
+const wrongEmail = {
+    name : 'ikamean',
+    email : 'wrongEmail@gmail.com'
+}
+
 describe('Login / Logout flow', () => {
 
     try {
@@ -41,7 +46,21 @@ describe('Login / Logout flow', () => {
             
 
         });
+
+
+        it('Login status must be 401', async () => {
+
+            const res = await chai.request(server)
+                        .post('/api/login')
+                        .send(wrongEmail)
+
+            res.should.have.status(401)
+        });
+
+        
     } catch (error) {
         console.log(error);
     }
+
+    
 });
