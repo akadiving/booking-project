@@ -2,11 +2,18 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/', ( req, res ) => {
-    console.log(req.body);
-    const name = req.body.name;
     const email = req.body.email;
+    const name = req.body.name;
+    
 
-    console.log(name,email);
+    
+
+    req.session.email = email;
+    req.session.name = name;
+
+
+
+    
 
     res.status(200).json(req.body)
 })

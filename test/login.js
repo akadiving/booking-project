@@ -40,11 +40,8 @@ describe('Login / Logout flow', () => {
             console.log(res.body);
 
             res.should.have.status(200)
-
             res.body.should.be.a('object')
-
-            
-
+     
         });
 
 
@@ -54,10 +51,15 @@ describe('Login / Logout flow', () => {
                         .post('/api/login')
                         .send(wrongEmail)
 
-            res.should.have.status(401)
+
+            console.log('Login Status =>>>>', res.status);       
+            console.log(res.body);
+
+            res.body.should.be.a('object');
+            res.should.have.status(401);
         });
 
-        
+
     } catch (error) {
         console.log(error);
     }

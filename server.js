@@ -8,6 +8,11 @@ const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
 
+/**
+ *  SESSION
+ */
+const session = require('./mongoDb/session/session');
+
 
 /**
  * Middlewares
@@ -30,12 +35,14 @@ app.use(cors({
     methods: [ "GET", "POST", "PUT", "DELETE" ]
 }));
 
+app.use(session);
 
 
 /**
  *  ROUTES
  */
 app.use('/api/login', verifyEmail, loginRouter);
+
 
 
 /**
@@ -49,6 +56,7 @@ if(process.env.NODE_ENV === 'dev') {
 
 
 app.get('/', ( req , res ) => {
+    console.log('Session is activated', req.session);
     res.send('Server is up')
 })
 
