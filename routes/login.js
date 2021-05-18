@@ -28,6 +28,10 @@ router.post('/', async ( req, res ) => {
     }
 
 
+
+    /**
+     *  If user is admin create new Doctor object and send it back as response.
+     */
     if(adminEmail === email){
         const adminUser = new doctor({
             name: name,
@@ -39,7 +43,6 @@ router.post('/', async ( req, res ) => {
         await adminUser.save();
 
         return res.status(201).send(adminUser);
-
 
     }
 

@@ -1,9 +1,13 @@
 {
     "dev" : {
-        "db" : "booking?retryWrites=true&w=majority"
+        "db" : "booking?retryWrites=true&w=majority",
+        "store" : "bookingStore?retryWrites=true&w=majority",
+        "collection" : "bookingStoreProduction"
     } ,
 
     "test" : {
-        "db" : "bookingTest?retryWrites=true&w=majority"
+        "db" : "bookingTest?retryWrites=true&w=majority",
+        "store" : "bookingTestStore?retryWrites=true&w=majority",
+        "collection" : "bookingStoreTest"
     } 
 }
