@@ -11,11 +11,7 @@ router.post('/', async ( req, res ) => {
 
     const adminEmail = process.env.ADMIN_EMAIL;
 
-    if(!email || !name){
-        return res.status(403).json({
-            error : "Wrong Credentials, Request must be Url-Encoded"
-        });
-    }
+    
 
     
     
