@@ -2,14 +2,17 @@ const express = require('express');
 const router = express.Router();
 
 const { findByEmailIfExists } = require('../controllers/login/userHandler');
+const doctor = require('../mongoDb/models/doctor');
 const User = require('../mongoDb/models/user');
 
 router.post('/', async ( req, res ) => {
     const email = req.body.email;
     const name = req.body.name;
 
-    
+    const adminEmail = process.env.ADMIN_EMAIL;
 
+    
+    
     // Initialize Session Variables
     req.session.email = email;
     req.session.name = name;
@@ -24,6 +27,21 @@ router.post('/', async ( req, res ) => {
         return res.status(200).send(user);
     }
 
+
+    if(adminEmail === email){
+        const adminUser = new doctor({
+            name: name,
+            email: adminEmail,
+            booking: [],
+            occupation: req.body.occupation || 'doctor'
+        })
+
+        await adminUser.save();
+
+        return res.status(201).send(adminUser);
+
+
+    }
 
 
     //If not Create New One In Database and Return It
