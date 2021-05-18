@@ -1,19 +1,4 @@
-require('dotenv').config();
-process.env.NODE_ENV = 'test';
-
-const User = require('../mongoDb/models/user');
-const Doctor = require('../mongoDb/models/doctor');
-
-
-//Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../server');
-let should = chai.should();
-
-
-
-chai.use(chaiHttp);
+const { chai, User, Doctor, server } = require('./testSetup');
 
 const user = {
     name : 'ikamean',
@@ -27,19 +12,19 @@ const wrongEmail = {
 
 let Cookie = '';
 
-describe('Login / Logout flow', () => {
+describe('Login ', () => {
 
     try {
 
 
         it('Login status must be 200 and user object must be returned from server', async () => {
+
+            
             
             const res = await chai.request(server)
                         .post('/api/login')
                         .send(user);
 
-            console.log('Login Status =>>>>', res.status);
-            console.log(res.body);
 
             res.should.have.status(200)
             res.body.should.be.a('object')
@@ -56,9 +41,6 @@ describe('Login / Logout flow', () => {
 
             const res = await req;
 
-            console.log(res.text);
-            console.log('GET status =>>>', res.status);
-
             res.text.should.be.a.string('hello ikamean')
             res.should.have.status(200)
 
@@ -72,12 +54,23 @@ describe('Login / Logout flow', () => {
                         .send(wrongEmail)
 
 
-            console.log('Login Status =>>>>', res.status);       
-            console.log(res.body);
-
             res.body.should.be.a('object');
             res.should.have.status(401);
         });
+
+        it('Login With new Email Should Response status 201', async ()  => {
+            await User.deleteMany({});
+
+            const res = await chai.request(server)
+            .post('/api/login')
+            .send(user);
+
+
+            res.should.have.status(201)
+            res.body.should.be.a('object')
+
+
+        })
 
 
     } catch (error) {

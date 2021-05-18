@@ -1,0 +1,38 @@
+const express = require('express');
+const router = express.Router();
+
+const store = require('../mongoDb/session/store');
+
+
+router.post('/', async (req,res) => {
+    /**
+        Removes user Session in Store with given session id 
+    */
+
+
+    const sid = req.session.id;
+
+
+
+    await store.destroy(sid, err => {
+        if(err){
+            console.log(err);
+            return null;
+        }
+    });
+
+
+    
+    /*
+        Removing Cookie in client browser. 
+    */
+    req.session.cookie.expires = new Date().getTime();
+    let cookieKey = req.headers.cookie.split('=')[0];
+    res.clearCookie(cookieKey);
+
+    console.log(`LOGOUT : =>>>>> user Logged Out`);
+
+    res.sendStatus(200);
+})
+
+module.exports = router;

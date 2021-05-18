@@ -7,6 +7,8 @@ const app = express();
  */
 const cors = require('cors');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+
 
 /**
  *  SESSION
@@ -18,30 +20,37 @@ const session = require('./mongoDb/session/session');
  * Middlewares
  */
 const verifyEmail = require('./middlewares/verifyEmail');
+const redirectLogin = require('./middlewares/redirectLogin');
 
 
 /**
  *  ROUTERS
  */
 const loginRouter = require('./routes/login.js');
+const logoutRouter = require('./routes/logout');
 
 
 /**
  * MiddleWares
  */
-app.use(express.json());
-app.use(cors({
-    origin: '*',
-    methods: [ "GET", "POST", "PUT", "DELETE" ]
-}));
+ app.use(express.json({ limit: '50mb' }));
 
-app.use(session);
+ app.use(express.urlencoded({ extended: true }));
+ app.use(cors({
+     origin: process.env.NODE_ENV === 'production' ? 'https://colab-booking.herokuapp.com/' : 'http://localhost:5000/',
+     optionsSuccessStatus: 200,
+     credentials: true
+ }));
+ app.use(cookieParser());
+
+ app.use(session);
 
 
 /**
  *  ROUTES
  */
 app.use('/api/login', verifyEmail, loginRouter);
+app.use('/api/logout', redirectLogin, logoutRouter);
 
 
 
