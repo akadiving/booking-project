@@ -1,7 +1,18 @@
 const verifier = require('email-verify');
 
  
-const verifyEmail = ( req, res, next ) =>
+const verifyEmail = ( req, res, next ) => 
+  
+{
+    const email = req.body.email;
+    const name = req.body.name;
+    
+    if(!email || !name){
+      return res.status(403).json({
+          error : "Wrong Credentials, Request must be Url-Encoded"
+      });
+  }  
+
   
   verifier.verify( req.body.email, ( err, info ) => {
 
@@ -25,6 +36,6 @@ const verifyEmail = ( req, res, next ) =>
       next();
     }
   });
-
+}
 
 module.exports = verifyEmail
