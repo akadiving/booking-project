@@ -12,7 +12,7 @@ const wrongEmail = {
 
 let Cookie = '';
 
-describe.skip('Login ', () => {
+describe('Login ', () => {
 
    beforeEach( async () => {
        await User.deleteMany({});

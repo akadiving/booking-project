@@ -1,8 +1,7 @@
-const redirectLogin = ( req, res, next ) => {
+const checkCookie = ( req, res, next ) => {
 
     
     if(!req.session.email){
-        
         
        return res.status(401).json({
            "error": "Not Authenticated Request"
@@ -15,4 +14,4 @@ const redirectLogin = ( req, res, next ) => {
     
 }
 
-module.exports = redirectLogin ;
+module.exports = checkCookie ;

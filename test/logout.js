@@ -1,7 +1,7 @@
 const { chai, User, Doctor, server } = require('./testSetup');
 
 
-describe.skip('Logout Route', () => {
+describe('Logout Route', () => {
 
     beforeEach( async () => {
         await User.deleteMany({});

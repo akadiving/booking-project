@@ -8,7 +8,7 @@ const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const { makeHash } = require('./controllers/admin/hash');
+
 
 /**
  *  SESSION
@@ -20,8 +20,9 @@ const session = require('./mongoDb/session/session');
  * Middlewares
  */
 const verifyEmail = require('./middlewares/verifyEmail');
-const redirectLogin = require('./middlewares/redirectLogin');
+const checkCookie = require('./middlewares/checkCookie');
 const verifyAdmin = require('./middlewares/verifyAdmin');
+
 
 
 /**
@@ -35,7 +36,7 @@ const adminRouter = require('./routes/admin');
 /**
  * MiddleWares
  */
- app.use(express.json({ limit: '50mb' }));
+ app.use(express.json());
 
  app.use(express.urlencoded({ extended: true }));
  app.use(cors({
@@ -53,8 +54,8 @@ const adminRouter = require('./routes/admin');
  *  ROUTES
  */
 app.use('/api/login', verifyEmail, loginRouter);
-app.use('/api/logout', redirectLogin, logoutRouter);
-app.use('/api/users', verifyAdmin, usersRouter );
+app.use('/api/logout', checkCookie, logoutRouter);
+app.use('/api/users', verifyAdmin,  usersRouter );
 app.use('/api/admin', adminRouter)
 
 
