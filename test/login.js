@@ -14,10 +14,15 @@ let Cookie = '';
 
 describe('Login ', () => {
 
+   beforeEach( async () => {
+       await User.deleteMany({});
+       await Doctor.deleteMany({})
+   })
+
     try {
 
 
-        it('Login status must be 200 and user object must be returned from server', async () => {
+        it('Login status must be 201 and user object should be returned, after that authorized request should return hello username', async () => {
 
             
             
@@ -26,25 +31,22 @@ describe('Login ', () => {
                         .send(user);
 
 
-            res.should.have.status(200)
+            res.should.have.status(201)
             res.body.should.be.a('object')
 
             Cookie = res.headers['set-cookie'].pop().split(';')[0];
-     
-        });
-
-        it('Respones text should be Hello', async () => {
 
             const req = chai.request(server).get('/');
             // Set cookie to get saved user session
             req.cookies = Cookie;
 
-            const res = await req;
+            const cookieResponse = await req;
 
-            res.text.should.be.a.string('hello ikamean')
-            res.should.have.status(200)
+            cookieResponse.text.should.be.a.string('hello ikamean')
+            cookieResponse.should.have.status(200)
+     
+        });
 
-        })
 
 
         it('Login status must be 401', async () => {
@@ -70,6 +72,21 @@ describe('Login ', () => {
             res.body.should.be.a('object')
 
 
+        });
+
+        it('Logging in with Admin mail should return Doctor User', async () => {
+            const admin = {
+                name : "admin",
+                email : process.env.ADMIN_EMAIL
+            }
+
+            const res = await chai.request(server)
+                            .post('/api/login')
+                            .send(admin)
+            res.should.have.status(201);
+            res.body.should.be.an('object');
+            res.body.should.have.property('occupation')
+                            
         })
 
 
