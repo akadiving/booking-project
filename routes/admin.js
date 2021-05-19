@@ -36,7 +36,7 @@ router.post('/login', async ( req, res ) => {
     // If everything is ok send admin object, and Initialize Session 
 
     req.session.email = req.body.email;
-    req.session.name = req.body.name;
+    req.session.name = 'Admin';
     req.session.hash = admin.password;
 
     
