@@ -10,10 +10,6 @@ router.post('/', async ( req, res ) => {
     const name = req.body.name;
 
     const adminEmail = process.env.ADMIN_EMAIL;
-
-    
-
-    
     
     // Initialize Session Variables
     req.session.email = email;
