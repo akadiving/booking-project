@@ -1,7 +1,10 @@
-const verifyAdmin = ( req, res, next ) => {
-    const adminEmail = process.env.ADMIN_EMAIL;
+const { compareHash } = require("../controllers/admin/hash");
 
-    const isAdmin = adminEmail === req.session.email
+const verifyAdmin = async ( req, res, next ) => {
+    
+    const adminPass = process.env.ADMIN_PASSWORD;
+
+    const isAdmin = await compareHash( req.session.hash, adminPass )
     
     if(!isAdmin){
        return res.status(403).json({

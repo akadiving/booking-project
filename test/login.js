@@ -12,7 +12,7 @@ const wrongEmail = {
 
 let Cookie = '';
 
-describe('Login ', () => {
+describe.skip('Login ', () => {
 
    beforeEach( async () => {
        await User.deleteMany({});
@@ -73,21 +73,6 @@ describe('Login ', () => {
 
 
         });
-
-        it('Logging in with Admin mail should return Doctor User', async () => {
-            const admin = {
-                name : "admin",
-                email : process.env.ADMIN_EMAIL
-            }
-
-            const res = await chai.request(server)
-                            .post('/api/login')
-                            .send(admin)
-            res.should.have.status(201);
-            res.body.should.be.an('object');
-            res.body.should.have.property('occupation')
-                            
-        })
 
 
     } catch (error) {

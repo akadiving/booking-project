@@ -1,7 +1,7 @@
 const { chai, User, Doctor, server } = require('./testSetup');
 
 
-describe('Logout Route', () => {
+describe.skip('Logout Route', () => {
 
     beforeEach( async () => {
         await User.deleteMany({});
@@ -33,7 +33,6 @@ describe('Logout Route', () => {
 
             res.should.have.status(201)
             res.body.should.be.a('object')
-
             let Cookie = res.headers['set-cookie'].pop().split(';')[0];
 
             const req = chai.request(server).post('/api/logout');
@@ -43,6 +42,7 @@ describe('Logout Route', () => {
             const logoutResp = await req;
 
             logoutResp.should.have.status(200);
+           
     })
 
     

@@ -8,7 +8,7 @@ const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-
+const { makeHash } = require('./controllers/admin/hash');
 
 /**
  *  SESSION
@@ -30,6 +30,7 @@ const verifyAdmin = require('./middlewares/verifyAdmin');
 const loginRouter = require('./routes/login.js');
 const logoutRouter = require('./routes/logout');
 const usersRouter = require('./routes/users.js');
+const adminRouter = require('./routes/admin');
 
 /**
  * MiddleWares
@@ -46,6 +47,7 @@ const usersRouter = require('./routes/users.js');
 
  app.use(session);
 
+ 
 
 /**
  *  ROUTES
@@ -53,6 +55,9 @@ const usersRouter = require('./routes/users.js');
 app.use('/api/login', verifyEmail, loginRouter);
 app.use('/api/logout', redirectLogin, logoutRouter);
 app.use('/api/users', verifyAdmin, usersRouter );
+app.use('/api/admin', adminRouter)
+
+
 
 
 
