@@ -62,7 +62,7 @@ describe('Admin', () => {
 })
 
 
-describe.skip('Get All Users from ADMIN', () => {
+describe('Get All Users from ADMIN', () => {
 
     
 
@@ -78,7 +78,6 @@ describe.skip('Get All Users from ADMIN', () => {
                             .post('/api/admin/login')
                             .send(admin);
 
-        console.log(res.headers);
         
         let Cookie =  res.headers['set-cookie'].pop().split(';')[0];
 
@@ -89,6 +88,8 @@ describe.skip('Get All Users from ADMIN', () => {
 
         const userRes = await req
 
-        console.log(userRes.status);
+        userRes.should.have.status(200);
+        userRes.body.should.be.an('array')
+
     })
 })

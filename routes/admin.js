@@ -3,7 +3,7 @@ const router = express.Router();
 
 const Admin = require('../mongoDb/models/admin');
 
-const { compareHash, makeHash } = require('../controllers/admin/hash');
+const { compareHash } = require('../controllers/admin/hash');
 
 router.post('/login', async ( req, res ) => {
     
