@@ -93,4 +93,11 @@ describe('Get All Users from ADMIN', () => {
 
         
     })
+
+    it.only('403 status for unauthorized request ', async () => {
+        const res = await chai.request(server)
+                        .get('/api/users')
+        
+        console.log(res.status);
+    })
 })

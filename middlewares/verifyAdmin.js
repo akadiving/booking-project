@@ -5,7 +5,7 @@ const verifyAdmin = async ( req, res, next ) => {
     const adminPass = process.env.ADMIN_PASSWORD;
 
 
-    const isAdmin = await compareHash( adminPass, req.session.hash )
+   const isAdmin = req.session.hash && await compareHash( adminPass, req.session.hash )
 
    
     
