@@ -21,6 +21,7 @@ const session = require('./mongoDb/session/session');
  */
 const verifyEmail = require('./middlewares/verifyEmail');
 const redirectLogin = require('./middlewares/redirectLogin');
+const verifyAdmin = require('./middlewares/verifyAdmin');
 
 
 /**
@@ -28,7 +29,7 @@ const redirectLogin = require('./middlewares/redirectLogin');
  */
 const loginRouter = require('./routes/login.js');
 const logoutRouter = require('./routes/logout');
-
+const usersRouter = require('./routes/users.js');
 
 /**
  * MiddleWares
@@ -37,7 +38,7 @@ const logoutRouter = require('./routes/logout');
 
  app.use(express.urlencoded({ extended: true }));
  app.use(cors({
-     origin: process.env.NODE_ENV === 'production' ? 'https://colab-booking.herokuapp.com/' : 'http://localhost:5000/',
+     //origin: process.env.NODE_ENV === 'production' ? 'https://colab-booking.herokuapp.com/' : 'http://localhost:5000/',
      optionsSuccessStatus: 200,
      credentials: true
  }));
@@ -51,6 +52,7 @@ const logoutRouter = require('./routes/logout');
  */
 app.use('/api/login', verifyEmail, loginRouter);
 app.use('/api/logout', redirectLogin, logoutRouter);
+app.use('/api/users', verifyAdmin, usersRouter );
 
 
 
