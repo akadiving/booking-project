@@ -1,7 +1,7 @@
 
-const { chai, User, Doctor, server } = require('./testSetup');
+const { chai, User, Doctor, Admin, server } = require('./testSetup');
 
-describe.skip('Admin', () => {
+describe('Admin', () => {
 
 
     it('Login/Logout admin Success 200', async () => {
@@ -62,7 +62,7 @@ describe.skip('Admin', () => {
 })
 
 
-describe('Get All Users from ADMIN', () => {
+describe.skip('Get All Users from ADMIN', () => {
 
     
 
@@ -78,17 +78,16 @@ describe('Get All Users from ADMIN', () => {
                             .post('/api/admin/login')
                             .send(admin);
 
-       
+        console.log(res.headers);
         
         let Cookie =  res.headers['set-cookie'].pop().split(';')[0];
 
-        const req = chai.request(server)
+        const req = chai.request(server).get('/api/users')
         
         req.cookies = Cookie;
 
-        console.log(req);
 
-        const userRes = await req.get('/api/users')
+        const userRes = await req
 
         console.log(userRes.status);
     })

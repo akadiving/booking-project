@@ -3,7 +3,7 @@ const router = express.Router();
 
 const Admin = require('../mongoDb/models/admin');
 
-const { compareHash } = require('../controllers/admin/hash');
+const { compareHash, makeHash } = require('../controllers/admin/hash');
 
 router.post('/login', async ( req, res ) => {
     
@@ -18,7 +18,8 @@ router.post('/login', async ( req, res ) => {
         });
     }
 
-   
+
+   // Comparing password from request body and password hash saved in DB
     const passwordsMatch = await compareHash(req.body.password, admin.password );
 
    
@@ -36,7 +37,9 @@ router.post('/login', async ( req, res ) => {
 
     req.session.email = req.body.email;
     req.session.name = req.body.name;
-    req.session.hash = process.env.ADMIN_PASSWORD;
+    req.session.hash = admin.password;
+
+    
 
 
     res.status(200).send(admin);
