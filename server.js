@@ -70,20 +70,25 @@ if(process.env.NODE_ENV === 'dev') {
 }
 
 
+if( process.env.NODE_ENV === 'test' ){
 
-app.use(express.static('dist') );
-// app.get('*',  (req,res) => {
-//     res.sendFile(`${__dirname}/dist/index.html`);
-// });
-
-app.get('/', ( req , res ) => {
+    app.get('/', ( req , res ) => {
     
-    if(req.session.name){
-        res.send(`hello ${req.session.name}`)
-    }
+        if(req.session.name){
+            res.send(`hello ${req.session.name}`)
+        }
+    
+        res.send('Server is up')
+    })
+}
 
-    res.send('Server is up')
-})
+app.use(express.static('dist'));
+
+app.get('*',  (req,res) => {
+    res.sendFile(`dist/index.html`);
+});
+
+
 
 
 
