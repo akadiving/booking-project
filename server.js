@@ -88,6 +88,8 @@ app.get('*',  (req,res) => {
     res.sendFile(`${__dirname}/dist/index.html`);
 });
 
+console.log('dirname =>>>>',__dirname);
+
 
 
 
