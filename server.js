@@ -8,7 +8,7 @@ const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-
+const path = require('path');
 
 /**
  *  SESSION
@@ -82,9 +82,13 @@ app.get('/ping', ( req , res ) => {
 
 
 
-app.get('*',  (req,res) => {
-    res.sendFile(`${__dirname}/dist/index.html`);
-});
+if( process.env.NODE_ENV === 'production' ) {
+    app.use(express.static( path.join ( __dirname, '/dist') ));
+    
+    app.get( '*' , (req, res) => {
+        res.sendFile(path.join( __dirname, 'dist', 'index.html' ));
+    })
+};
 
 console.log('dirname =>>>>',__dirname);
 
