@@ -85,7 +85,7 @@ if( process.env.NODE_ENV === 'test' ){
 app.use(express.static('dist'));
 
 app.get('*',  (req,res) => {
-    res.sendFile(`dist/index.html`);
+    res.sendFile(`${__dirname}/dist/index.html`);
 });
 
 
