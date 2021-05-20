@@ -73,7 +73,7 @@ if(process.env.NODE_ENV === 'dev') {
 
 if( process.env.NODE_ENV !== 'test' ){
 
-    app.use(express.static('dist'));
+    app.use(express.static(`${__dirname}/dist`));
     
     
     app.get('*', ( req, res ) => {
