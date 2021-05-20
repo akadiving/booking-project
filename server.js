@@ -47,6 +47,7 @@ const adminRouter = require('./routes/admin');
  
  app.use(session);
  
+ app.use(express.static(`${__dirname}/dist`));
  
  /**
   *  ROUTES
@@ -70,19 +71,16 @@ if(process.env.NODE_ENV === 'dev') {
 }
 
 
-if( process.env.NODE_ENV === 'test' ){
-
-    app.get('/', ( req , res ) => {
+app.get('/ping', ( req , res ) => {
     
-        if(req.session.name){
-            res.send(`hello ${req.session.name}`)
-        }
-    
-        res.send('Server is up')
-    })
-}
+    if(req.session.name){
+        res.send(`hello ${req.session.name}`)
+    }
 
-app.use(express.static(`${__dirname}/dist`));
+    res.send('Server is up')
+})
+
+
 
 app.get('*',  (req,res) => {
     res.sendFile(`${__dirname}/dist/index.html`);

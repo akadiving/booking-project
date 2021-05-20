@@ -36,7 +36,7 @@ describe('Login ', () => {
 
             Cookie = res.headers['set-cookie'].pop().split(';')[0];
 
-            const req = chai.request(server).get('/');
+            const req = chai.request(server).get('/ping');
             // Set cookie to get saved user session
             req.cookies = Cookie;
 
