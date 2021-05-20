@@ -71,16 +71,10 @@ if(process.env.NODE_ENV === 'dev') {
 
 
 
-if( process.env.NODE_ENV !== 'test' ){
-
-    app.use(express.static(`${__dirname}/dist`));
-    
-    
-    app.get('*', ( req, res ) => {
-        res.sendFile(`${__dirname}/dist/index.html`);
-    })    
-    
-}
+app.use(express.static(`${__dirname}/dist`) );
+app.get('*',  (req,res) => {
+    res.sendFile(`${__dirname}/dist/index.html`);
+});
 
 app.get('/', ( req , res ) => {
     
