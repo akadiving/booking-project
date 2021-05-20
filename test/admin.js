@@ -15,7 +15,7 @@ describe('Admin', () => {
                         })
 
        
-
+                        
         
         res.should.have.status(200);
         res.body.should.be.an('object');
@@ -25,6 +25,8 @@ describe('Admin', () => {
         const req = chai.request(server).post('/api/logout');
         // Set cookie to get saved user session
         req.cookies = Cookie;
+
+        
 
         const logoutResp = await req;
 
@@ -43,6 +45,8 @@ describe('Admin', () => {
         
         res.should.have.status(401);
         res.body.should.be.an('object');
+
+        console.log(res);
     });
 
     it('Login admin Email Fail 401', async () => {

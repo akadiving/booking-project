@@ -37,7 +37,6 @@ const adminRouter = require('./routes/admin');
  * MiddleWares
  */
  app.use(express.json());
-
  app.use(express.urlencoded({ extended: true }));
  app.use(cors({
      //origin: process.env.NODE_ENV === 'production' ? 'https://colab-booking.herokuapp.com/' : 'http://localhost:5000/',
@@ -45,18 +44,17 @@ const adminRouter = require('./routes/admin');
      credentials: true
  }));
  app.use(cookieParser());
-
- app.use(session);
-
  
-
-/**
- *  ROUTES
- */
-app.use('/api/login', verifyEmail, loginRouter);
-app.use('/api/logout', checkCookie, logoutRouter);
-app.use('/api/users', verifyAdmin,  usersRouter );
-app.use('/api/admin', adminRouter)
+ app.use(session);
+ 
+ 
+ /**
+  *  ROUTES
+  */
+ app.use('/api/login', verifyEmail, loginRouter);
+ app.use('/api/logout', checkCookie, logoutRouter);
+ app.use('/api/users', verifyAdmin,  usersRouter );
+ app.use('/api/admin', adminRouter)
 
 
 // Added yaml
@@ -72,6 +70,14 @@ if(process.env.NODE_ENV === 'dev') {
 }
 
 
+app.use(express.static('dist'));
+
+if( process.env.NODE_ENV !== 'test' ){
+
+    app.get('*', ( req, res ) => {
+        res.sendFile(`${__dirname}/dist/index.html`);
+    })    
+}
 
 app.get('/', ( req , res ) => {
     
@@ -82,13 +88,6 @@ app.get('/', ( req , res ) => {
     res.send('Server is up')
 })
 
-if( process.env.NODE_ENV !== 'test' ){
-    app.use(express.static('dist'));
-
-    app.get('*', ( req, res ) => {
-        res.sendFile(`${__dirname}/dist`);
-    })    
-}
 
 
 

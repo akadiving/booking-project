@@ -2,7 +2,7 @@ const session = require('express-session')
 const store = require('./store');
 
 const sess = session({
-    name: 'sid',
+    name: 'BookingApp',
     resave: false,
     secret: process.env.SESS_SECRET,
     saveUninitialized: false,
@@ -10,7 +10,7 @@ const sess = session({
     cookie :{
         sameSite: 'strict',
         httpOnly: true, 
-        maxAge: 1000 * 60 * 60
+        maxAge: 1000 * 60 * 60 * 24
     }
 });
 
