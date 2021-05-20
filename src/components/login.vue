@@ -9,7 +9,8 @@
                   <v-avatar 
                     class="d-flex align-center"
                     v-bind="attrs"
-                    v-on="on">
+                    v-on="on"
+                    v-if="image">
                     <img
                       :src="image"
                       alt="User"
@@ -178,21 +179,24 @@ export default {
         const email = googleUser.getBasicProfile().getEmail();
         const image = googleUser.getBasicProfile().getImageUrl();
 
-        const profile = {
+        const profile =  {
           userName: name,
           userEmail: email,
           userImage: image
-        }
+        } 
+
+        this.isSignIn = true
 
         let profileSerialized = JSON.stringify(profile)
         localStorage.setItem('profile', profileSerialized);
         let profileDeserialized = JSON.parse(localStorage.getItem('profile'))
-
         this.user_image = profileDeserialized.userImage
+
   
         googleLogin(name, email);
         console.log("googleUser name", name);
         console.log("googleUser email", email);
+        console.log("googleUser image", image);
         this.dialog = false;
         
       } catch (error) {
@@ -200,7 +204,7 @@ export default {
         console.error(error);
         this.errorM = error.error;
         return null;
-      } 
+      }
     },
     async logout(){
         try {
@@ -211,26 +215,27 @@ export default {
             console.error(error);
         }
 
-          axios.post('https://colab-booking.herokuapp.com/api/logout/', {withCredentials: true})
-          .then((response) => {
-            console.log(response)
-            })
-          .catch((error) => {
-            console.log(error)
+        axios.post('https://colab-booking.herokuapp.com/api/logout/', {withCredentials: true})
+        .then((response) => {
+          console.log(response)
+          this.removeItems()
           })
-       
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('profile');
+        .catch((error) => {
+          console.log(error)
+          this.removeItems()
+        })
     },
     removeError(){
       this.errorM = '';
     },
+    removeItems(){
+      localStorage.removeItem('profile');
+    }
   },
   mounted(){
     if(localStorage.getItem('profile')){
-        let profileDeserialized = JSON.parse(localStorage.getItem('profile'))
         this.isSignIn = true
+        let profileDeserialized = JSON.parse(localStorage.getItem('profile'))
         this.user_image = profileDeserialized.userImage
     }
   },
