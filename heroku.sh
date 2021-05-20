@@ -1,3 +1,4 @@
+rm -rf dist
 cd ../bookingF
 git pull origin
 npm run build
