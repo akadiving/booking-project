@@ -47,7 +47,7 @@ const adminRouter = require('./routes/admin');
  
  app.use(session);
  
- app.use(express.static(`${__dirname}/dist`));
+//  app.use(express.static(`${__dirname}/dist`));
  
  /**
   *  ROUTES
