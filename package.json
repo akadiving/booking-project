@@ -7,7 +7,8 @@
     "start": "node server.js",
     "dev": "NODE_ENV=dev nodemon server.js",
     "test": "mocha",
-    "heroku-postbuild": "npm install"
+    "heroku-postbuild": "npm install",
+    "production" : "bash heroku.sh"
   },
   "keywords": [],
   "author": "",
