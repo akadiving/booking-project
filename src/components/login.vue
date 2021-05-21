@@ -2,7 +2,7 @@
     <div>
       <!-- if logged in -->
         <template v-if="isSignIn">
-          <div >   
+          <div>   
             <div class="text-center">
               <v-menu offset-y>
                 <template v-slot:activator="{ on, attrs }">
@@ -15,6 +15,7 @@
                       :src="image"
                       alt="User"
                     >
+                    <slot></slot>
                   </v-avatar>
                 </template>
                   <v-card width="200px">
@@ -45,17 +46,15 @@
         max-width="290"   
         >
         <template v-slot:activator="{ on, attrs }">
-          
-
           <div>
              <v-btn
                 class="d-flex align-center"
-                text
                 v-bind="attrs"
                 v-on="on"
+                dark
+                outlined
               >
               Login
-              <v-icon large right>mdi-account-circle-outline</v-icon>
             </v-btn>
           </div>
            
@@ -155,11 +154,13 @@ import axios from 'axios';
 
 export default {
   name: 'Login',
+  props: {
+    isSignIn: Boolean
+  },
 
   data: () => ({
     dialog: false,
     errorM: '',
-    isSignIn: false,
     user_image: ''
   }),
   computed: {
@@ -185,7 +186,7 @@ export default {
           userImage: image
         } 
 
-        this.isSignIn = true
+        this.signIn()
 
         let profileSerialized = JSON.stringify(profile)
         localStorage.setItem('profile', profileSerialized);
@@ -207,10 +208,10 @@ export default {
       }
     },
     async logout(){
+        this.signOut()
         try {
             await this.$gAuth.signOut();
-            this.isSignIn = this.$gAuth.isAuthorized;
-            console.log("isSignIn", this.$gAuth.isAuthorized);
+            console.log("isSignIn", this.isSignIn);
         } catch (error) {
             console.error(error);
         }
@@ -224,6 +225,12 @@ export default {
           console.log(error)
           this.removeItems()
         })
+    },
+    signIn(){
+      this.$emit('signIn')
+    },
+    signOut(){
+      this.$emit('signOut')
     },
     removeError(){
       this.errorM = '';

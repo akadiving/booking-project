@@ -1,6 +1,25 @@
 <template>
-    <div class="text-center">
-        <v-dialog
+  <div id="admin" class="text-center">
+    <div v-if='isSignIn'>
+      {{name}}
+      <v-btn @click='logout'>
+        Logout
+      </v-btn>
+      <v-btn
+        color="#1F7087"
+        outlined
+        
+        @click="home"
+      >
+      <v-icon>
+          mdi-home
+      </v-icon>
+        Home
+      </v-btn>
+    </div>
+
+    <div v-else>
+      <v-dialog
         v-model="dialog"
         max-width="290"
         persistent   
@@ -33,7 +52,7 @@
                       outlined
                       label
                       close
-                      @click:close='removeError()' 
+                      @click:close='removeError()'
                       > {{errorM}}</v-chip>
                     </v-card-title>
                   </div>
@@ -41,7 +60,7 @@
                   <!-- error message -->
                     
                   <!-- login form -->
-                  <v-form ref="loginform" @submit.prevent="adminLogin()" v-model="validLogin">
+                  <v-form ref="loginform" v-model="validLogin">
                     <v-container class="justify-center">
                       <v-row justify="center"
                         align="center" 
@@ -81,7 +100,7 @@
                             outlined
                             block
                             :disabled="!validLogin"
-                            type='submit'
+                            @click='login'
                           >
                             Login
                           </v-btn>
@@ -110,67 +129,148 @@
           </v-tabs>
           <!-- tabs --> 
         </v-card>
-
-        </v-dialog>
-    </div>
+      </v-dialog>
+    </div>  
+  </div>
 </template>
 
 <script>
 import router from '../router/index';
-import adminLogin from '../login/adminLogin.js'
+//import adminLogin from '../login/adminLogin.js';
+import axios from 'axios';
 
 export default  {
-    name: 'Admin',
-    components: {
+  name: 'Admin',
+  props: {
+    
+  },
+  components: {
 
-    },
-    data: () => ({
-        dialog: true,
-        errorM: '',
-        isSignIn: false,
-        password: '',
-        email: '',
-        validLogin: true,
-        passwordRules: [
-        v => !!v || 'Password is required',
-        ],
-        emailRules: [
-            v => !!v || 'E-mail is required',
-            v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-        ],
-    }),
+  },
+  data: () => ({
+    name: '',
+    dialog: true,
+    errorM: '',
+    isSignIn: false,
+    password: '',
+    email: '',
+    validLogin: true,
+    passwordRules: [
+      v => !!v || 'Password is required',
+    ],
+    emailRules: [
+      v => !!v || 'E-mail is required',
+      v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+    ],
+  }),
 
-    methods: {
-        removeError(){
-            this.errorM = '';
-        },
-        async adminLogin(){
-            try{
-                adminLogin(this.email, this.password)
-                this.isSignIn = true
-                this.dialog = false
-            }catch (error) {
-                //on fail do something
-                console.error(error);
-                this.errorM = error.error;
-                this.isSignIn = false
-                this.dialog = true
-        }
-            
-            
-        },
-        home(){
-            router.push({ path: '/' }).catch(err => {
-            // Ignore the vuex err regarding  navigating to the page they are already on.
-            if (err.name !== 'NavigationDuplicated' &&
-                !err.message.includes('Avoided redundant navigation to current location')
-                ) {
-                    // But print any other errors to the console
-                    logError(err);
-                }
-            });
-        },
+  methods: {
+    //handling login workflow with axios
+    async login(){
+      try{
+        const baseURL = 'https://colab-booking.herokuapp.com/api/admin/login/';
+        axios
+          .post(baseURL, {
+            email : this.email,
+            password : this.password
+          })
+          .then((res) => {
+            console.log(res)
+            //Check if response contains ADMIN as a name and creates key on local storage
+            if(res.data.name === 'admin'){
+              this.isSignIn = true
+              this.dialog = false
+              this.setWithExpiry('admin', res.data.name, 3600000)
+              this.name = this.getName('admin')
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+            this.errorM = "Wrong credentials";
+            this.isSignIn = false
+            this.dialog = true
+          });
+      }catch (error) {
+        //on fail do something
+        console.error(error);
+        this.errorM = error.data;
+        this.isSignIn = false
+        this.dialog = true
+      }
     },
+    //logs out by removing admin key from local storage
+    logout(){
+      localStorage.removeItem('admin')
+      this.isSignIn = false
+      this.dialog = true
+      this.email = ''
+      this.password = ''
+      this.errorM = ''
+    },
+    //fonction for home link
+    home(){
+        router.push({ path: '/' }).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (err.name !== 'NavigationDuplicated' &&
+            !err.message.includes('Avoided redundant navigation to current location')
+            ) {
+                // But print any other errors to the console
+                logError(err);
+            }
+        });
+    },
+    //Removes error from login pop-up
+    removeError(){
+      this.errorM = '';
+    },
+    //set expire date on admin key value
+    setWithExpiry(key, value, ttl) {
+      const now = new Date()
+
+      // `item` is an object which contains the original value
+      // as well as the time when it's supposed to expire
+      const item = {
+        value: value,
+        expire: now.getTime() + ttl,
+      }
+      localStorage.setItem(key, JSON.stringify(item))
+    },
+    //checks the expirationd date on admin key stored in local storage
+    getWithExpire(key) {
+      const itemStr = localStorage.getItem(key)
+      // if the item doesn't exist, return null
+      if (!itemStr) {
+        return null
+      }
+      const item = JSON.parse(itemStr)
+      const now = new Date()
+      // compare the expiry time of the item with the current time
+      if (now.getTime() > item.expire) {
+        // If the item is expired, delete the item from storage
+        // and return null
+        localStorage.removeItem(key)
+        return null
+      }
+      return item.value
+    },
+    //gets the name of admin
+    getName(key) {
+      const itemStr = localStorage.getItem(key)
+      // if the item doesn't exist, return null
+      if (!itemStr) {
+        return null
+      }
+      const item = JSON.parse(itemStr)
+      const now = new Date()
+      return item.value
+    }
+  },
+  mounted(){
+    if(this.getWithExpire('admin')){
+      this.isSignIn = true
+      this.name = this.getName('admin')
+    }
+  }
 };
 
 </script>
