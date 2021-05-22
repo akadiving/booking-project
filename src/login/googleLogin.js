@@ -1,7 +1,7 @@
 import axios from 'axios';
 const baseURL = 'https://colab-booking.herokuapp.com/api/login/';
 
-const googleLogin = (name, email) => {
+const nodeLogin = (name, email) => {
 	console.log(name, email);
 	axios
 		.post(baseURL, {
@@ -14,4 +14,4 @@ const googleLogin = (name, email) => {
 };
 
 
-export default googleLogin;
+export default nodeLogin;

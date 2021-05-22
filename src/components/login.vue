@@ -122,6 +122,7 @@
                           class="ma-2"
                           color="primary"
                           outlined
+                          @click='fbLogin'
                         >
                           Login with
                           <v-icon right>
@@ -149,19 +150,23 @@
     </div>
 </template>
 <script>
-import googleLogin from '../login/googleLogin.js';
+import nodeLogin from '../login/googleLogin.js';
 import axios from 'axios';
 
 export default {
   name: 'Login',
+  components: {
+
+  },
   props: {
-    isSignIn: Boolean
+
   },
 
   data: () => ({
     dialog: false,
     errorM: '',
-    user_image: ''
+    user_image: '',
+    isSignIn: false
   }),
   computed: {
     image(){
@@ -186,19 +191,18 @@ export default {
           userImage: image
         } 
 
-        this.signIn()
-
         let profileSerialized = JSON.stringify(profile)
         localStorage.setItem('profile', profileSerialized);
         let profileDeserialized = JSON.parse(localStorage.getItem('profile'))
         this.user_image = profileDeserialized.userImage
 
   
-        googleLogin(name, email);
+        nodeLogin(name, email);
         console.log("googleUser name", name);
         console.log("googleUser email", email);
         console.log("googleUser image", image);
         this.dialog = false;
+        this.isSignIn = true
         
       } catch (error) {
         //on fail do something
@@ -207,30 +211,42 @@ export default {
         return null;
       }
     },
-    async logout(){
-        this.signOut()
-        try {
-            await this.$gAuth.signOut();
-            console.log("isSignIn", this.isSignIn);
-        } catch (error) {
-            console.error(error);
-        }
+    async fbLogin(){
+      await FB.login(function(response) { 
+        if (response.authResponse) {
+            console.log(response);
+            FB.api('/me?fields=id,first_name,email,picture', function(response) {
+              console.log(response)
+              const profile =  {
+                userName: response.first_name,
+                userEmail: response.email,
+                userImage: response.picture.data.url
+              } 
+              
+              let profileSerialized = JSON.stringify(profile)
+              localStorage.setItem('profile', profileSerialized);
+              let profileDeserialized = JSON.parse(localStorage.getItem('profile'))
+              this.user_image = profileDeserialized.userImage
 
-        axios.post('https://colab-booking.herokuapp.com/api/logout/', {withCredentials: true})
-        .then((response) => {
-          console.log(response)
-          this.removeItems()
-          })
-        .catch((error) => {
-          console.log(error)
-          this.removeItems()
+              nodeLogin(response.first_name, response.email);
+            });
+        } else {
+          console.log('User cancelled login or did not fully authorize.');
+        }
+    }, this.dialog = false, this.isSignIn = true);
+    },
+    async logout(){
+      axios.post('https://colab-booking.herokuapp.com/api/logout/', {withCredentials: true})
+      .then((response) => {
+        console.log(response)
+        
+        this.removeItems()
         })
-    },
-    signIn(){
-      this.$emit('signIn')
-    },
-    signOut(){
-      this.$emit('signOut')
+      .catch((error) => {
+        console.log(error)
+        this.removeItems()
+      })
+      this.isSignIn = false
     },
     removeError(){
       this.errorM = '';
@@ -244,6 +260,7 @@ export default {
         this.isSignIn = true
         let profileDeserialized = JSON.parse(localStorage.getItem('profile'))
         this.user_image = profileDeserialized.userImage
+        console.log(this.user_image)
     }
   },
 };

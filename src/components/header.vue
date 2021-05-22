@@ -17,11 +17,7 @@
             <v-btn
             text
             >   
-            <Login
-            :isSignIn ='isSignIn'
-            @signIn = 'signIn'
-            @signOut = 'signOut'
-            />
+            <Login />
             </v-btn>
 
 
@@ -38,7 +34,7 @@ export default {
         Login
     },
     data: () => ({
-        isSignIn: false
+
     }),
     methods: {
         home(){
@@ -52,12 +48,6 @@ export default {
                 }
             });
         },
-        signIn(){
-            this.isSignIn = true
-        },
-        signOut(){
-            this.isSignIn = false
-        }
     }
 }
 

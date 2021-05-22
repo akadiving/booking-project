@@ -60,7 +60,7 @@
                   <!-- error message -->
                     
                   <!-- login form -->
-                  <v-form ref="loginform" v-model="validLogin">
+                  <v-form v-model="validLogin">
                     <v-container class="justify-center">
                       <v-row justify="center"
                         align="center" 
@@ -166,7 +166,7 @@ export default  {
 
   methods: {
     //handling login workflow with axios
-    async login(){
+    login(){
       try{
         const baseURL = 'https://colab-booking.herokuapp.com/api/admin/login/';
         axios
@@ -269,6 +269,7 @@ export default  {
     if(this.getWithExpire('admin')){
       this.isSignIn = true
       this.name = this.getName('admin')
+      this.dialog = false
     }
   }
 };
