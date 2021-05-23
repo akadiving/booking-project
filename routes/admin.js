@@ -62,7 +62,7 @@ router.post('/login', async ( req, res ) => {
     
     
         res.status(200).send(admin);
-        
+
     } catch (error) {
         res.status(500).send(error)
     }
@@ -75,7 +75,7 @@ router.post('/login', async ( req, res ) => {
  *  Add Working hours from admin dashboard
  */
 
-router.post('/workTime/add', async ( req, res ) => {
+router.post('/workTime/add', checkCookie, async ( req, res ) => {
 
     try {
         
@@ -113,7 +113,7 @@ router.post('/workTime/add', async ( req, res ) => {
  * Delete available work date
  */
 
-router.delete('/workTime/delete/:id', async ( req, res) => {
+router.delete('/workTime/delete/:id', checkCookie, async ( req, res) => {
 
     try {
         
@@ -121,17 +121,27 @@ router.delete('/workTime/delete/:id', async ( req, res) => {
         
         const admin = await Admin.findOne({ email : req.session.email });
 
-       
+        const workTime = admin.workTime.find( time => time.id === id )
+        
+        /** 
+         *  if id is not present or workTime object not found send 404
+         */
+
+        if(!workTime || !id ){
+            return res.status(404).send({
+                error: 'workTime Not Found, check request id parameter'
+            })
+        }
     
         admin.workTime = admin.workTime.filter( time => time.id !== id );
 
     
         await admin.save();
     
-        res.status(200).json({ 
+        res.status(200).json({
             success: true,
-            data : admin.workTime
-        })
+            msg : 'work time deleted successfully'
+        });
 
     } catch (error) {
         console.log(error);
