@@ -32,6 +32,7 @@ const loginRouter = require('./routes/login.js');
 const logoutRouter = require('./routes/logout');
 const usersRouter = require('./routes/users.js');
 const adminRouter = require('./routes/admin');
+const doctorRouter = require('./routes/doctor')
 
 /**
  * MiddleWares
@@ -56,6 +57,7 @@ const adminRouter = require('./routes/admin');
  app.use('/api/logout', checkCookie, logoutRouter);
  app.use('/api/users', verifyAdmin,  usersRouter );
  app.use('/api/admin', adminRouter)
+ app.use('/api/doctor', doctorRouter)
 
 
 // Added yaml

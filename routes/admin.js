@@ -6,19 +6,20 @@ const Admin = require('../mongoDb/models/admin');
 
 const { compareHash } = require('../controllers/admin/hash');
 const  checkCookie  = require('../middlewares/checkCookie');
+const verifyAdmin = require('../middlewares/verifyAdmin');
 
 /**
  *  Get Logged in admin user
  */
-router.get('/me', checkCookie, async ( req, res ) => {
+
+
+router.get('/me', verifyAdmin, async ( req, res ) => {
     try {
-        
-        const admin = await  Admin.findOne({ email : req.session.email });
+        const admin = await Admin.findOne({ email: req.session.email });
 
         res.send(admin)
-
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).json(error)
     }
 })
 
@@ -75,7 +76,7 @@ router.post('/login', async ( req, res ) => {
  *  Add Working hours from admin dashboard
  */
 
-router.post('/workTime/add', checkCookie, async ( req, res ) => {
+router.post('/workTime/add', verifyAdmin, async ( req, res ) => {
 
     try {
         
@@ -113,7 +114,7 @@ router.post('/workTime/add', checkCookie, async ( req, res ) => {
  * Delete available work date
  */
 
-router.delete('/workTime/delete/:id', checkCookie, async ( req, res) => {
+router.delete('/workTime/delete/:id', verifyAdmin, async ( req, res) => {
 
     try {
         
