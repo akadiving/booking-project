@@ -42,3 +42,5 @@
                 workDay: String,
                 workTime: String
             }
+-       Delete /api/admin/workTime/delete/:id
+

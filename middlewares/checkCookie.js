@@ -8,7 +8,7 @@ const checkCookie = ( req, res, next ) => {
        })
     }
 
-    console.log('request author Logging out =>>>>>', req.session.name);
+    console.log('request author verify =>>>>>', req.session.name);
 
     next();
     
