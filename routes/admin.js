@@ -5,6 +5,22 @@ const uuid = require('uuid').v4();
 const Admin = require('../mongoDb/models/admin');
 
 const { compareHash } = require('../controllers/admin/hash');
+const  checkCookie  = require('../middlewares/checkCookie');
+
+/**
+ *  Get Logged in admin user
+ */
+router.get('/me', checkCookie, async ( req, res ) => {
+    try {
+        
+        const admin = await  Admin.findOne({ email : req.session.email });
+
+        res.send(admin)
+
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
 
 router.post('/login', async ( req, res ) => {
     
@@ -48,6 +64,10 @@ router.post('/login', async ( req, res ) => {
 
 });
 
+/**
+ *  Add Working hours from admin dashboard
+ */
+
 router.post('/workTime/add', async ( req, res ) => {
 
     try {
@@ -81,6 +101,8 @@ router.post('/workTime/add', async ( req, res ) => {
     }
     
 })
+
+
 
 
 
