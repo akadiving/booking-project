@@ -4,6 +4,7 @@ const mongoose = require('../connect');
 const doctorSchema = new mongoose.Schema({
     name: String,
     email: String,
+    password: String,
     booking: Array,
     occupation: String,
     workTime: Array
