@@ -44,3 +44,6 @@
             }
 -       Delete /api/admin/workTime/delete/:id
 
+### Doctor api
+
+-       GET /api/doctor/:email
