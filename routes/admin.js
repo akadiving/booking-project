@@ -72,14 +72,14 @@ router.post('/workTime/add', async ( req, res ) => {
 
     try {
         
-        const { workTime, workDate } = req.body;
+        const { workTime, workDay } = req.body;
     
         
         const admin = await Admin.findOne({  email: req.session.email })
     
     
         const newWorkTime = {
-            date: workDate,
+            day: workDay,
             time: workTime,
             id: uuid
         }
