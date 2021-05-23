@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const uuid = require('uuid').v4();
 
 const Admin = require('../mongoDb/models/admin');
 
@@ -12,7 +13,7 @@ router.post('/login', async ( req, res ) => {
     
     // If it cannot match admin in database sent wrong credentials
 
-    if( admin === null ) {
+    if( admin === null || !req.body.password ) {
         return res.status(401).send({
             error: "Wrong Credentials"
         });
@@ -46,5 +47,41 @@ router.post('/login', async ( req, res ) => {
 
 
 });
+
+router.post('/workTime/add', async ( req, res ) => {
+
+    try {
+        
+        const { workTime, workDate } = req.body;
+    
+        
+        const admin = await Admin.findOne({  email: req.session.email })
+    
+    
+        const newWorkTime = {
+            date: workDate,
+            time: workTime,
+            id: uuid
+        }
+    
+        
+        admin.workTime = [...admin.workTime, newWorkTime ];
+    
+        await admin.save();
+    
+    
+        res.status(201).json({
+            success: true,
+            data : newWorkTime
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error)
+    }
+    
+})
+
+
 
 module.exports = router;

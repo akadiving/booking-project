@@ -6,7 +6,8 @@ const adminSchema = new mongoose.Schema({
     email: String,
     password: String,
     booking: Array,
-    occupation: String
+    occupation: String,
+    workTime : Array
 })
 
 adminSchema.set('toJSON', {

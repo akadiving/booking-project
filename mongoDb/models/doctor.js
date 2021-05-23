@@ -5,7 +5,8 @@ const doctorSchema = new mongoose.Schema({
     name: String,
     email: String,
     booking: Array,
-    occupation: String
+    occupation: String,
+    workTime: Array
 })
 
 doctorSchema.set('toJSON', {
