@@ -1,7 +1,7 @@
 <template>
     <div>
       <!-- if logged in -->
-        <template v-if="isSignIn">
+        <template v-if="isSignIn && user_image">
           <div>   
             <div class="text-center">
               <v-menu offset-y>
@@ -150,7 +150,7 @@
     </div>
 </template>
 <script>
-import nodeLogin from '../login/googleLogin.js';
+import nodeLogin from '../login/nodeLogin.js';
 import axios from 'axios';
 
 export default {
@@ -211,49 +211,59 @@ export default {
         return null;
       }
     },
-    async fbLogin(){
-      await FB.login(function(response) { 
+    fbLogin(){
+      FB.login(function(response) {
         if (response.authResponse) {
-            console.log(response);
-            FB.api('/me?fields=id,first_name,email,picture', function(response) {
-              console.log(response)
-              const profile =  {
-                userName: response.first_name,
-                userEmail: response.email,
-                userImage: response.picture.data.url
-              } 
-              
-              let profileSerialized = JSON.stringify(profile)
-              localStorage.setItem('profile', profileSerialized);
-              let profileDeserialized = JSON.parse(localStorage.getItem('profile'))
-              this.user_image = profileDeserialized.userImage
+          console.log(response);
+          FB.api('/me', 'GET', {fields: 'id,first_name,email,picture'}, function(response) {
+            console.log(response)
 
-              nodeLogin(response.first_name, response.email);
-            });
+            const name = response.first_name
+            const email = response.email
+            const image = response.picture.data.url
+
+            const profile =  {
+              userName: name,
+              userEmail: email,
+              userImage: image
+            }
+
+            let profileSerialized = JSON.stringify(profile)
+            localStorage.setItem('profile', profileSerialized);
+            let profileDeserialized = JSON.parse(localStorage.getItem('profile'))
+            this.user_image = profileDeserialized.userImage
+
+            nodeLogin(name, email)
+            this.isSignIn = true
+            this.dialog = false
+          })
         } else {
           console.log('User cancelled login or did not fully authorize.');
         }
-    }, this.dialog = false, this.isSignIn = true);
+      })
+      this.dialog = false 
+      this.isSignIn = true
     },
     async logout(){
       axios.post('https://colab-booking.herokuapp.com/api/logout/', {withCredentials: true})
       .then((response) => {
-        console.log(response)
-        
+        console.log(response)      
         this.removeItems()
+        this.isSignIn = false
         })
       .catch((error) => {
         console.log(error)
         this.removeItems()
+        this.isSignIn = false
       })
-      this.isSignIn = false
+      
     },
     removeError(){
       this.errorM = '';
     },
     removeItems(){
       localStorage.removeItem('profile');
-    }
+    },
   },
   mounted(){
     if(localStorage.getItem('profile')){

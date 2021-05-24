@@ -8,7 +8,6 @@
       <v-btn
         color="#1F7087"
         outlined
-        
         @click="home"
       >
       <v-icon>
@@ -16,6 +15,20 @@
       </v-icon>
         Home
       </v-btn>
+      <v-container>
+        <Users />
+      </v-container>
+
+      <v-container>
+        <v-data-table
+          :headers="headers"
+          :items="schedule"
+          :items-per-page="10"
+          class="elevation-1"
+          loading
+          loading-text="Loading... Please wait"
+        ></v-data-table>
+      </v-container>
     </div>
 
     <div v-else>
@@ -138,6 +151,7 @@
 import router from '../router/index';
 //import adminLogin from '../login/adminLogin.js';
 import axios from 'axios';
+import Users from '../components/users.vue'
 
 export default  {
   name: 'Admin',
@@ -145,9 +159,19 @@ export default  {
     
   },
   components: {
-
+    Users
   },
   data: () => ({
+    headers: [
+      {
+        text: 'id',
+        align: 'start',
+        sortable: false,
+        value: 'id',
+      },
+      { text: 'Day', value: 'day' },
+      { text: 'Time', value: 'time' },
+    ],
     name: '',
     dialog: true,
     errorM: '',
@@ -162,6 +186,7 @@ export default  {
       v => !!v || 'E-mail is required',
       v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
     ],
+    schedule: [],
   }),
 
   methods: {
@@ -182,6 +207,8 @@ export default  {
               this.dialog = false
               this.setWithExpiry('admin', res.data.name, 3600000)
               this.name = this.getName('admin')
+              this.schedule = res.data.workTime
+              console.log(this.schedule)
             }
           })
           .catch((error) => {
@@ -263,7 +290,7 @@ export default  {
       const item = JSON.parse(itemStr)
       const now = new Date()
       return item.value
-    }
+    },
   },
   mounted(){
     if(this.getWithExpire('admin')){
