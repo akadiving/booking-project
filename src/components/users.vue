@@ -4,7 +4,7 @@
     :items="users"
     :items-per-page="10"
     class="elevation-1"
-    loading
+    :loading = loadUsers
     loading-text="Loading... Please wait"
   ></v-data-table>
 </template>
@@ -28,6 +28,7 @@ export default {
           { text: 'Email', value: 'email' },
           { text: 'Booking', value: 'booking' },
         ],
+        loadUsers: true,
     }),
 
     methods: {
@@ -37,6 +38,7 @@ export default {
             .then((response) => {
                 this.users = response.data
                 console.log(this.users)
+                this.loadUsers = false
             })
         }
     },

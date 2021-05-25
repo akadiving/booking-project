@@ -166,7 +166,8 @@ export default {
     dialog: false,
     errorM: '',
     user_image: '',
-    isSignIn: false
+    isSignIn: false,
+    
   }),
   computed: {
     image(){
@@ -245,11 +246,11 @@ export default {
       this.isSignIn = true
     },
     async logout(){
+      this.isSignIn = false
       axios.post('https://colab-booking.herokuapp.com/api/logout/', {withCredentials: true})
       .then((response) => {
         console.log(response)      
         this.removeItems()
-        this.isSignIn = false
         })
       .catch((error) => {
         console.log(error)
