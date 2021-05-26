@@ -15,15 +15,12 @@ const path = require('path');
  */
 const session = require('./mongoDb/session/session');
 
-
 /**
  * Middlewares
  */
 const verifyEmail = require('./middlewares/verifyEmail');
 const checkCookie = require('./middlewares/checkCookie');
 const verifyAdmin = require('./middlewares/verifyAdmin');
-
-
 
 /**
  *  ROUTERS
@@ -32,76 +29,65 @@ const loginRouter = require('./routes/login.js');
 const logoutRouter = require('./routes/logout');
 const usersRouter = require('./routes/users.js');
 const adminRouter = require('./routes/admin');
-const doctorRouter = require('./routes/doctor')
+const doctorRouter = require('./routes/doctor');
 
 /**
  * MiddleWares
  */
- app.use(express.json());
- app.use(express.urlencoded({ extended: true }));
- app.use(cors({
-     //origin: process.env.NODE_ENV === 'production' ? 'https://colab-booking.herokuapp.com/' : 'http://localhost:5000/',
-     optionsSuccessStatus: 200,
-     credentials: true
- }));
- app.use(cookieParser());
- 
- app.use(session);
- 
-//  app.use(express.static(`${__dirname}/dist`));
- 
- /**
-  *  ROUTES
-  */
- app.use('/api/login', verifyEmail, loginRouter);
- app.use('/api/logout', checkCookie, logoutRouter);
- app.use('/api/users', verifyAdmin,  usersRouter );
- app.use('/api/admin', adminRouter)
- app.use('/api/doctor', doctorRouter)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    //origin: process.env.NODE_ENV === 'production' ? 'https://colab-booking.herokuapp.com/' : 'http://localhost:5000/',
+    optionsSuccessStatus: 200,
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 
+app.use(session);
+
+//  app.use(express.static(`${__dirname}/dist`));
+
+/**
+ *  ROUTES
+ */
+app.use('/api/login', verifyEmail, loginRouter);
+app.use('/api/logout', checkCookie, logoutRouter);
+app.use('/api/users', verifyAdmin, usersRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/doctor', doctorRouter);
 
 // Added yaml
 
-
-
 /**
- *  Morgan Loger 
+ *  Morgan Loger
  */
-if(process.env.NODE_ENV === 'dev') {
-    //use morgan to log at command line
-    app.use(morgan('combined')); //'combined' outputs the Apache style LOGs
+if (process.env.NODE_ENV === 'dev') {
+  //use morgan to log at command line
+  app.use(morgan('combined')); //'combined' outputs the Apache style LOGs
 }
 
+app.get('/ping', (req, res) => {
+  if (req.session.name) {
+    res.send(`hello ${req.session.name}`);
+  }
 
-app.get('/ping', ( req , res ) => {
-    
-    if(req.session.name){
-        res.send(`hello ${req.session.name}`)
-    }
+  res.send('Server is up');
+});
 
-    res.send('Server is up')
-})
+app.use(express.static(`${__dirname}/dist`));
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+if (process.env.NODE_ENV === 'production') {
+  console.log('production');
+}
 
+console.log('dirname =>>>>', __dirname);
 
-if( process.env.NODE_ENV === 'production' ) {
-    app.use(express.static( path.join ( __dirname, '/dist') ));
-    
-    app.get( '*' , (req, res) => {
-        res.sendFile(path.join( __dirname, 'dist', 'index.html' ));
-    })
-};
-
-console.log('dirname =>>>>',__dirname);
-
-
-
-
-
-
-
-
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => console.log(`server is listening to port ${PORT}`));
 
