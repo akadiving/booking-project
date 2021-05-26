@@ -9,19 +9,19 @@
       class="flex footer"
       flat
       tile
-      color="#CCF2EF"
+      color="white"
     >
         
-      <v-card-text class="py-2 white--text text-center footer">
+      <v-card-text color="#7E4875" class="py-2 black--text text-center footer">
         {{ new Date().getFullYear() }} — <strong>A.I Dev</strong>
         <v-btn
           class="mx-4"
-          color="white"
+          color="#7E4875"
           icon
           href="https://github.com/akadiving/booking-project"
           target="_blank"
         >
-          <v-icon x-large>
+          <v-icon x-large color='#7E4875'>
             mdi-github
           </v-icon>
         </v-btn>
@@ -39,7 +39,7 @@ export default {
 
 <style>
     .footer {
-        background-color: #F66156;
+        background-color: white;
         
     }
 </style>

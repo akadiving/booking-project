@@ -1,7 +1,7 @@
 <template>
     <div>
       <!-- if logged in -->
-        <template v-if="isSignIn && user_image">
+        <template v-if="isSignIn">
           <div>   
             <div class="text-center">
               <v-menu offset-y>
@@ -15,10 +15,9 @@
                       :src="image"
                       alt="User"
                     >
-                    <slot></slot>
                   </v-avatar>
                 </template>
-                  <v-card width="200px">
+                  <v-card width="180px">
                     <v-list>
                       <v-list-item link @click='logout'>
                         <v-btn 
@@ -51,8 +50,9 @@
                 class="d-flex align-center"
                 v-bind="attrs"
                 v-on="on"
+                color='#7E4875'
                 dark
-                outlined
+                elevation='0'
               >
               Login
             </v-btn>
@@ -62,11 +62,10 @@
         <v-card>
           <!-- tabs -->
           <v-tabs
-              dark
-              background-color="#7E4875"
-              grow
-              flat
-              slider-color="#ED7B22"
+            dark
+            background-color="#7E4875"
+            grow
+            flat
           >
               <v-tab>
               Login

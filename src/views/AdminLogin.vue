@@ -68,6 +68,7 @@
                                 outlined
                                 clearable
                                 required
+                                
                             ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -94,6 +95,7 @@
                                 block
                                 :disabled="!validLogin"
                                 @click='login'
+                                
                             >
                                 Login
                             </v-btn>

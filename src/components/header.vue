@@ -1,15 +1,15 @@
 <template>
     <v-app-bar app 
-      color="#F66156"
+      color="white"
       flat
-      elevate-on-scroll>
+      light
+      elevation='1'>
 
             <v-avatar
             class="d-flex align-center"
-            dark
             @click='home'
             >
-            <v-icon x-large dark>mdi-stethoscope</v-icon>
+            <v-icon x-large dark color="#7E4875">mdi-stethoscope</v-icon>
             </v-avatar>
 
         <v-spacer></v-spacer>
