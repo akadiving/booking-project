@@ -4,15 +4,30 @@
       <v-col cols='auto'>
         <v-card
           class="mx-auto"
-          max-width="290"
+          max-width="320"
         >
           <v-img
             height="250"
             width="100%"
             src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
           ></v-img>
-
-          <v-card-title>Dr. Amanda Nunez</v-card-title>
+          
+          <v-card-title>Dr. Amanda Nunez 
+             <v-rating
+                :value="4.5"
+                color="amber"
+                dense
+                half-increments
+                readonly
+                size="16"
+                length='1'
+                class="ms-2"
+              >
+              </v-rating>
+              <div class="grey--text text-sm-body-2 ms-2 mt-1">
+                4.5 (413)
+              </div>
+          </v-card-title>
 
           <v-card-text>
             
@@ -20,20 +35,12 @@
               align="center"
               class="mx-0"
             >
-              <v-rating
-                :value="4.5"
-                color="amber"
-                dense
-                half-increments
-                readonly
-                size="14"
-              ></v-rating>
-
-              <div class="grey--text ms-4">
-                4.5 (413)
-              </div>
-              <div class="my-4 subtitle-1">
+              <div class="my-4 subtitle-1 black--text">
                 PhD, Physician, Pediatrician
+              </div>
+              <div class="black--text text-md-body-1">
+                <v-icon color="#7E4875" class="mb-1 mr-1">mdi-clock-time-eight-outline</v-icon>
+                9:00 AM - 16:00 PM
               </div>
             </v-row>
           </v-card-text>
