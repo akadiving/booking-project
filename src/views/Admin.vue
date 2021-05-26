@@ -20,14 +20,7 @@
       </v-container>
 
       <v-container>
-        <v-data-table
-          :headers="headers"
-          :items="schedule"
-          :items-per-page="10"
-          class="elevation-1"
-          :loading = loadTable
-          loading-text="Loading... Please wait"
-        ></v-data-table>
+        <Schedule />
       </v-container>
     </div>
   </div>
@@ -36,8 +29,9 @@
 <script>
 import router from '../router/index';
 //import adminLogin from '../login/adminLogin.js';
-//import axios from 'axios';
+import axios from 'axios';
 import Users from '../components/users.vue'
+import Schedule from '../components/schedule.vue'
 
 export default  {
   name: 'Admin',
@@ -45,7 +39,8 @@ export default  {
     
   },
   components: {
-    Users
+    Users,
+    Schedule
   },
   data: () => ({
     headers: [
@@ -70,20 +65,36 @@ export default  {
       v => !!v || 'E-mail is required',
       v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
     ],
-    schedule: [],
+    
     loadTable: true
   }),
 
   methods: {
     //logs out by removing admin key from local storage
     logout(){
-      localStorage.removeItem('admin')
-      this.admin = false
-      this.dialog = true
-      this.email = ''
-      this.password = ''
-      this.errorM = ''
-      this.adminLoginPage()
+      axios.post('https://colab-booking.herokuapp.com/api/logout/', {withCredentials: true})
+      .then((response) => {
+        console.log(response)
+        localStorage.removeItem('admin')
+        this.admin = false
+        this.dialog = true
+        this.email = ''
+        this.password = ''
+        this.errorM = ''
+        this.adminLoginPage()
+        
+        })
+      .catch((error) => {
+        console.log(error)
+        localStorage.removeItem('admin')
+        this.isSignIn = false
+        this.admin = false
+        this.dialog = true
+        this.email = ''
+        this.password = ''
+        this.errorM = ''
+        this.adminLoginPage()
+      })
     },
     //fonction for home link
     home(){

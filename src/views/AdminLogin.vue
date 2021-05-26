@@ -246,11 +246,27 @@ export default {
         },
         //logs out by removing admin key from local storage
         logout(){
-            localStorage.removeItem('admin')
-            this.isSignIn = false
-            this.email = ''
-            this.password = ''
-            this.errorM = ''
+            axios.post('https://colab-booking.herokuapp.com/api/logout/', {withCredentials: true})
+            .then((response) => {
+                console.log(response)
+                localStorage.removeItem('admin')
+                this.isSignIn = false
+                this.dialog = true
+                this.email = ''
+                this.password = ''
+                this.errorM = ''
+                this.home()
+                })
+            .catch((error) => {
+                console.log(error)
+                localStorage.removeItem('admin')
+                this.isSignIn = false
+                this.dialog = true
+                this.email = ''
+                this.password = ''
+                this.errorM = ''
+                this.home()
+            })
         }, 
     },
     mounted(){
