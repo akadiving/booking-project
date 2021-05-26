@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
     console.log('session', req.session);
 
     req.session.cookie._expires = new Date().getTime();
-    let cookieKey = req.headers.cookie.split('=')[1].split(' ')[1];
+    let cookieKey = 'BookingApp';
     console.log('splitted cookie array =>>>', req.headers.cookie.split('='));
     console.log('cookie key =>>>>', cookieKey);
     res.clearCookie(cookieKey);
