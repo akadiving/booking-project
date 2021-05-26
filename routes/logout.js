@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
     console.log(`LOGOUT : =>>>>> user Logged Out`, cookieKey);
     console.log(req.session.cookie.expires, 'cookie expiration date');
     req.session.cookie.expires = new Date().getTime();
-    let cookieKey = req.headers.cookie.split('=')[0];
+    let cookieKey = req.headers.cookie.split('=')[2];
     res.clearCookie(cookieKey);
 
     res.sendStatus(200);
