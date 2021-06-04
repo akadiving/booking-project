@@ -57,7 +57,6 @@ app.use('/api/logout', checkCookie, logoutRouter);
 app.use('/api/users', verifyAdmin, usersRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/doctor', doctorRouter);
-app.use('/test');
 
 // Added yaml
 
